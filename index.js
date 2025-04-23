@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const fs = require("fs");
+const path = require("path");
 const {
   REST,
   Routes,
@@ -64,7 +65,6 @@ for (const folder of commandFolders) {
     }
   }
 }
-
 const rest = new REST().setToken(process.env.TOKEN);
 (async () => {
   try {
