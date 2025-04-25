@@ -32,7 +32,7 @@ module.exports = {
       } catch (e) {
         console.log(e);
       }
-    }, 60000);
+    }, 60000 * 30);
     console.log(`Ready! Logged in as ${client.user.tag}`);
   },
 };

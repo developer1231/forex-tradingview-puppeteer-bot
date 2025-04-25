@@ -27,7 +27,7 @@ export async function screenshotReviews(client: Client): Promise<boolean> {
   const reviewElements: ElementHandle<Element>[] = await page.$$(
     ".styles_cardWrapper__g8amG"
   );
-
+  console.log(reviewElements);
   console.log(`Found ${reviewElements.length} reviews.`);
   if (reviewElements.length === data.last_length) {
     await browser.close();
@@ -35,7 +35,7 @@ export async function screenshotReviews(client: Client): Promise<boolean> {
   }
 
   // Get the newest review
-  const element: ElementHandle = reviewElements[reviewElements.length - 1];
+  const element: ElementHandle = reviewElements[0];
 
   // Check if it's a 5-star review
   const starImg: ElementHandle | null = await element.$(
@@ -82,25 +82,31 @@ export async function screenshotReviews(client: Client): Promise<boolean> {
   const channel = client.channels.cache.get(
     process.env.CHANNEL1_ID!
   ) as TextChannel;
-  if (channel) {
+  const channel2 = client.channels.cache.get(
+    process.env.CHANNEL2_ID!
+  ) as TextChannel;
+  if (channel && channel2) {
     const embed = new EmbedBuilder()
-      .setTitle(`⭐️ Review #${reviewElements.length}`)
+      .setTitle(`⭐️ | Review #${reviewElements.length}`)
       .setAuthor({
         name: client?.user?.username || "Screenshot bot",
         iconURL: client.user?.displayAvatarURL(),
       })
       .setDescription(
-        `> ⭐️ New **5-star** review detected!\n> 🚀 Review number: ${reviewElements.length}\n> 🏅 Total reviews: ${reviewElements.length}`
+        `> ⭐️ **New 5-star review detected!**\n> 🚀 **  Review number:** ${reviewElements.length}\n> 🏅 **Total reviews:** ${reviewElements.length}`
       )
-      .setThumbnail(client?.user?.displayAvatarURL() || null)
       .setFooter({
         text: "Student Review • Automated Review Notifications",
         iconURL: client.user?.displayAvatarURL(),
       })
-      .setColor("#39FF14")
+      .setColor("#12e192")
       .setImage(`attachment://review-${reviewElements.length}.png`);
 
     await channel.send({
+      embeds: [embed],
+      files: [attachment],
+    });
+    await channel2.send({
       embeds: [embed],
       files: [attachment],
     });
@@ -161,27 +167,34 @@ export async function singlePreload(client: Client): Promise<boolean> {
     const channel = client.channels.cache.get(
       process.env.CHANNEL1_ID as string
     ) as TextChannel;
+    const channel2 = client.channels.cache.get(
+      process.env.CHANNEL2_ID as string
+    ) as TextChannel;
     if (channel) {
       const embed = new EmbedBuilder()
-        .setTitle(`⭐️ Review #${i + 1}`)
+        .setTitle(`⭐️ | Review #${i + 1}`)
         .setAuthor({
           name: client?.user?.username || "Screenshot bot",
           iconURL: client.user?.displayAvatarURL(),
         })
         .setDescription(
-          `> ⭐️ New review detected!\n> 🚀 Review number: ${
+          `> ⭐️ **New review detected!**\n> 🚀 **Review number:** ${
             i + 1
-          }\n> 🏅 Total reviews: ${reviewElements.length}`
+          }\n> 🏅 **Total reviews:** ${reviewElements.length}`
         )
-        .setThumbnail(client?.user?.displayAvatarURL() || null)
+
         .setFooter({
           text: "Student Review • Automated Review Notifications",
           iconURL: client.user?.displayAvatarURL(),
         })
-        .setColor("#39FF14")
+        .setColor("#12e192")
         .setImage(`attachment://review-${i + 1}.png`);
 
       await channel.send({
+        embeds: [embed],
+        files: [attachment],
+      });
+      await channel2.send({
         embeds: [embed],
         files: [attachment],
       });

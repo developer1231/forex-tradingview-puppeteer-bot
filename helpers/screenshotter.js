@@ -152,46 +152,48 @@ function screenshotReviews(client) {
       boundingBox,
       attachment,
       channel,
+      channel2,
       embed;
-    var _a, _b, _c, _d;
-    return __generator(this, function (_e) {
-      switch (_e.label) {
+    var _a, _b, _c;
+    return __generator(this, function (_d) {
+      switch (_d.label) {
         case 0:
           return [4 /*yield*/, puppeteer_1.launch({ headless: true })];
         case 1:
-          browser = _e.sent();
+          browser = _d.sent();
           return [4 /*yield*/, browser.newPage()];
         case 2:
-          page = _e.sent();
+          page = _d.sent();
           return [4 /*yield*/, page.goto(url, { waitUntil: "networkidle2" })];
         case 3:
-          _e.sent();
+          _d.sent();
           return [
             4 /*yield*/,
             page.waitForSelector(".styles_cardWrapper__g8amG"),
           ];
         case 4:
-          _e.sent();
+          _d.sent();
           return [4 /*yield*/, page.$$(".styles_cardWrapper__g8amG")];
         case 5:
-          reviewElements = _e.sent();
+          reviewElements = _d.sent();
+          console.log(reviewElements);
           console.log("Found ".concat(reviewElements.length, " reviews."));
           if (!(reviewElements.length === data.last_length))
             return [3 /*break*/, 7];
           return [4 /*yield*/, browser.close()];
         case 6:
-          _e.sent();
+          _d.sent();
           return [2 /*return*/, false];
         case 7:
-          element = reviewElements[reviewElements.length - 1];
+          element = reviewElements[0];
           return [4 /*yield*/, element.$('img[alt="Rated 5 out of 5 stars"]')];
         case 8:
-          starImg = _e.sent();
+          starImg = _d.sent();
           if (!!starImg) return [3 /*break*/, 10];
           console.log("Latest review is not 5 stars. Skipping screenshot.");
           return [4 /*yield*/, browser.close()];
         case 9:
-          _e.sent();
+          _d.sent();
           return [2 /*return*/, false];
         case 10:
           data.last_length = reviewElements.length;
@@ -202,7 +204,7 @@ function screenshotReviews(client) {
           });
           return [4 /*yield*/, element.boundingBox()];
         case 11:
-          boundingBox = _e.sent();
+          boundingBox = _d.sent();
           if (!boundingBox) return [3 /*break*/, 13];
           return [
             4 /*yield*/,
@@ -217,12 +219,12 @@ function screenshotReviews(client) {
             }),
           ];
         case 12:
-          _e.sent();
-          _e.label = 13;
+          _d.sent();
+          _d.label = 13;
         case 13:
           return [4 /*yield*/, browser.close()];
         case 14:
-          _e.sent();
+          _d.sent();
           attachment = new discord_js_1.AttachmentBuilder(
             "./images/review-".concat(reviewElements.length, ".png"),
             {
@@ -230,9 +232,10 @@ function screenshotReviews(client) {
             }
           );
           channel = client.channels.cache.get(process.env.CHANNEL1_ID);
-          if (!channel) return [3 /*break*/, 16];
+          channel2 = client.channels.cache.get(process.env.CHANNEL2_ID);
+          if (!(channel && channel2)) return [3 /*break*/, 17];
           embed = new discord_js_1.EmbedBuilder()
-            .setTitle("\u2B50\uFE0F Review #".concat(reviewElements.length))
+            .setTitle("\u2B50\uFE0F | Review #".concat(reviewElements.length))
             .setAuthor({
               name:
                 ((_a =
@@ -247,28 +250,21 @@ function screenshotReviews(client) {
                   : _b.displayAvatarURL(),
             })
             .setDescription(
-              "> \u2B50\uFE0F New **5-star** review detected!\n> \uD83D\uDE80 Review number: "
+              "> \u2B50\uFE0F **New 5-star review detected!**\n> \uD83D\uDE80 **  Review number:** "
                 .concat(
                   reviewElements.length,
-                  "\n> \uD83C\uDFC5 Total reviews: "
+                  "\n> \uD83C\uDFC5 **Total reviews:** "
                 )
                 .concat(reviewElements.length)
-            )
-            .setThumbnail(
-              ((_c =
-                client === null || client === void 0 ? void 0 : client.user) ===
-                null || _c === void 0
-                ? void 0
-                : _c.displayAvatarURL()) || null
             )
             .setFooter({
               text: "Student Review • Automated Review Notifications",
               iconURL:
-                (_d = client.user) === null || _d === void 0
+                (_c = client.user) === null || _c === void 0
                   ? void 0
-                  : _d.displayAvatarURL(),
+                  : _c.displayAvatarURL(),
             })
-            .setColor("#39FF14")
+            .setColor("#12e192")
             .setImage(
               "attachment://review-".concat(reviewElements.length, ".png")
             );
@@ -280,9 +276,18 @@ function screenshotReviews(client) {
             }),
           ];
         case 15:
-          _e.sent();
-          _e.label = 16;
+          _d.sent();
+          return [
+            4 /*yield*/,
+            channel2.send({
+              embeds: [embed],
+              files: [attachment],
+            }),
+          ];
         case 16:
+          _d.sent();
+          _d.label = 17;
+        case 17:
           return [2 /*return*/, true];
       }
     });
@@ -299,29 +304,30 @@ function singlePreload(client) {
       boundingBox,
       attachment,
       channel,
+      channel2,
       embed;
-    var _a, _b, _c, _d;
-    return __generator(this, function (_e) {
-      switch (_e.label) {
+    var _a, _b, _c;
+    return __generator(this, function (_d) {
+      switch (_d.label) {
         case 0:
           return [4 /*yield*/, puppeteer_1.launch({ headless: true })];
         case 1:
-          browser = _e.sent();
+          browser = _d.sent();
           return [4 /*yield*/, browser.newPage()];
         case 2:
-          page = _e.sent();
+          page = _d.sent();
           return [4 /*yield*/, page.goto(url, { waitUntil: "networkidle2" })];
         case 3:
-          _e.sent();
+          _d.sent();
           return [
             4 /*yield*/,
             page.waitForSelector(".styles_cardWrapper__g8amG"),
           ];
         case 4:
-          _e.sent();
+          _d.sent();
           return [4 /*yield*/, page.$$(".styles_cardWrapper__g8amG")];
         case 5:
-          reviewElements = _e.sent();
+          reviewElements = _d.sent();
           console.log("Found ".concat(reviewElements.length, " reviews."));
           data.last_length = reviewElements.length;
           fs_1.writeFile("./data.json", JSON.stringify(data), function (err) {
@@ -330,23 +336,23 @@ function singlePreload(client) {
             }
           });
           i = 0;
-          _e.label = 6;
+          _d.label = 6;
         case 6:
-          if (!(i < reviewElements.length)) return [3 /*break*/, 13];
+          if (!(i < reviewElements.length)) return [3 /*break*/, 14];
           element = reviewElements[i];
           return [4 /*yield*/, element.$('img[alt="Rated 5 out of 5 stars"]')];
         case 7:
-          starImg = _e.sent();
+          starImg = _d.sent();
           console.log(starImg);
           if (!starImg) {
             console.log(
               "Skipping review ".concat(i + 1, " \u2014 not 5 stars.")
             );
-            return [3 /*break*/, 12];
+            return [3 /*break*/, 13];
           }
           return [4 /*yield*/, element.boundingBox()];
         case 8:
-          boundingBox = _e.sent();
+          boundingBox = _d.sent();
           if (!boundingBox) return [3 /*break*/, 10];
           return [
             4 /*yield*/,
@@ -361,9 +367,9 @@ function singlePreload(client) {
             }),
           ];
         case 9:
-          _e.sent();
+          _d.sent();
           console.log("Saved screenshot: review-".concat(i + 1, ".png"));
-          _e.label = 10;
+          _d.label = 10;
         case 10:
           attachment = new discord_js_1.AttachmentBuilder(
             "./images/review-".concat(i + 1, ".png"),
@@ -372,9 +378,10 @@ function singlePreload(client) {
             }
           );
           channel = client.channels.cache.get(process.env.CHANNEL1_ID);
-          if (!channel) return [3 /*break*/, 12];
+          channel2 = client.channels.cache.get(process.env.CHANNEL2_ID);
+          if (!channel) return [3 /*break*/, 13];
           embed = new discord_js_1.EmbedBuilder()
-            .setTitle("\u2B50\uFE0F Review #".concat(i + 1))
+            .setTitle("\u2B50\uFE0F | Review #".concat(i + 1))
             .setAuthor({
               name:
                 ((_a =
@@ -389,25 +396,18 @@ function singlePreload(client) {
                   : _b.displayAvatarURL(),
             })
             .setDescription(
-              "> \u2B50\uFE0F New review detected!\n> \uD83D\uDE80 Review number: "
-                .concat(i + 1, "\n> \uD83C\uDFC5 Total reviews: ")
+              "> \u2B50\uFE0F **New review detected!**\n> \uD83D\uDE80 **Review number:** "
+                .concat(i + 1, "\n> \uD83C\uDFC5 **Total reviews:** ")
                 .concat(reviewElements.length)
-            )
-            .setThumbnail(
-              ((_c =
-                client === null || client === void 0 ? void 0 : client.user) ===
-                null || _c === void 0
-                ? void 0
-                : _c.displayAvatarURL()) || null
             )
             .setFooter({
               text: "Student Review • Automated Review Notifications",
               iconURL:
-                (_d = client.user) === null || _d === void 0
+                (_c = client.user) === null || _c === void 0
                   ? void 0
-                  : _d.displayAvatarURL(),
+                  : _c.displayAvatarURL(),
             })
-            .setColor("#39FF14")
+            .setColor("#12e192")
             .setImage("attachment://review-".concat(i + 1, ".png"));
           return [
             4 /*yield*/,
@@ -417,15 +417,24 @@ function singlePreload(client) {
             }),
           ];
         case 11:
-          _e.sent();
-          _e.label = 12;
+          _d.sent();
+          return [
+            4 /*yield*/,
+            channel2.send({
+              embeds: [embed],
+              files: [attachment],
+            }),
+          ];
         case 12:
+          _d.sent();
+          _d.label = 13;
+        case 13:
           i++;
           return [3 /*break*/, 6];
-        case 13:
-          return [4 /*yield*/, browser.close()];
         case 14:
-          _e.sent();
+          return [4 /*yield*/, browser.close()];
+        case 15:
+          _d.sent();
           return [2 /*return*/, true];
       }
     });
